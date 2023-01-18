@@ -1,2 +1,2 @@
 # explorations
-Random python scripts and notebooks
+Some example python scripts and notebooks
