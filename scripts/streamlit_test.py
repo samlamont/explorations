@@ -9,8 +9,15 @@ st.set_page_config(
     # layout="wide",
 )
 
-st.title("Flood Maps")
+st.title("SAR - Flood Mapping Demo")
 
+"""
+`Notes` We can potentially use this as a demo page to display flood mapping outputs on an interactive webpage. 
+The data (cloud-optimized geotiffs, COGs) can be kept in s3 buckets for cheap and displayed here with a fairly simple
+app that is easy to customize.
+
+`What other functionality do you think is needed?`
+"""
 
 # The following taken from: https://developmentseed.org/titiler/examples/notebooks/Working_with_CloudOptimizedGeoTIFF_simple/
 titiler_endpoint = "https://titiler.xyz"  # Developmentseed Demo endpoint. Please be kind.
@@ -34,7 +41,8 @@ r = httpx.get(
 
 m = Map(
     location=((bounds[1] + bounds[3]) / 2, (bounds[0] + bounds[2]) / 2),
-    zoom_start=13
+    zoom_start=13,
+    tiles="cartodbdark_matter"  # "cartodbpositron",
 )
 
 aod_layer = TileLayer(
@@ -45,8 +53,8 @@ aod_layer = TileLayer(
 aod_layer.add_to(m)
 
 # Add map to streamlit
-height = 500
-width = 700
+height = 700
+width = 900
 components.html(m._repr_html_(), height=height + 10, width=width)
 
 """
