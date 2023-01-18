@@ -17,6 +17,10 @@ The data (cloud-optimized geotiffs, COGs) can be kept in s3 buckets for cheap an
 app that is easy to customize.
 
 `What other functionality do you think is needed?`
+:thinking_face:
+
+The data shown in the map below is just a sample file from Digital Globe hosted at:
+ https://opendata.digitalglobe.com/events/mauritius-oil-spill/post-event/2020-08-12/105001001F1B5B00/105001001F1B5B00.tif
 """
 
 # The following taken from: https://developmentseed.org/titiler/examples/notebooks/Working_with_CloudOptimizedGeoTIFF_simple/
@@ -42,7 +46,7 @@ r = httpx.get(
 m = Map(
     location=((bounds[1] + bounds[3]) / 2, (bounds[0] + bounds[2]) / 2),
     zoom_start=13,
-    tiles="cartodbdark_matter"  # "cartodbpositron",
+    tiles="cartodbdark_matter"  # "cartodbpositron", "stamentoner"
 )
 
 aod_layer = TileLayer(
@@ -58,5 +62,19 @@ width = 900
 components.html(m._repr_html_(), height=height + 10, width=width)
 
 """
-Does this add text? Why yes, yes it does. And you can use `regular markdown` type *stuff*
+See other StreamLit examples here: https://streamlit.io/gallery
 """
+
+st.info('This is a purely informational message')
+
+with st.form("my_form"):
+   st.write("Inside the form")
+   slider_val = st.slider("Form slider")
+   checkbox_val = st.checkbox("Form checkbox")
+
+   # Every form must have a submit button.
+   submitted = st.form_submit_button("Submit")
+   if submitted:
+       st.write("slider", slider_val, "checkbox", checkbox_val)
+
+st.write("Outside the form")
