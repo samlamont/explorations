@@ -245,47 +245,47 @@ if __name__ == "__main__":
     
     SWORD_REACHES_DATA = Path(DATA_PATH, "sacramentovalley6hdata", "sword_reaches_with_discharge.parquet")
     
-    # # Open files
-    # polys_gdf = gpd.read_file(POLYGONS)
-    # nodes_gdf = gpd.read_parquet(SWORD_NODES)
-    # reaches_gdf = gpd.read_parquet(SWORD_REACHES)
+    # Open files
+    polys_gdf = gpd.read_file(POLYGONS)
+    nodes_gdf = gpd.read_parquet(SWORD_NODES)
+    reaches_gdf = gpd.read_parquet(SWORD_REACHES)
 
-    # # Join
-    # polys_gdf["CATID"] = polys_gdf.CATID.astype(str)
+    # Join
+    polys_gdf["CATID"] = polys_gdf.CATID.astype(str)
 
-    # # Find most-occurring node in each polygon
-    # gdf_overlay = gpd.overlay(nodes_gdf, polys_gdf[["geometry", "CATID"]])
-    # gp = gdf_overlay.groupby(by="reach_id")
-    # reference = []
-    # for reach_id, gdf in gp:
-    #     most_commmon_catid = gdf.CATID.value_counts().idxmax()
-    #     reference.append({"reach_id": reach_id, "catid": most_commmon_catid})
-    # df_lookup = pd.DataFrame(reference)
+    # Find most-occurring node in each polygon
+    gdf_overlay = gpd.overlay(nodes_gdf, polys_gdf[["geometry", "CATID"]])
+    gp = gdf_overlay.groupby(by="reach_id")
+    reference = []
+    for reach_id, gdf in gp:
+        most_commmon_catid = gdf.CATID.value_counts().idxmax()
+        reference.append({"reach_id": reach_id, "catid": most_commmon_catid})
+    df_lookup = pd.DataFrame(reference)
 
-    # # Join CATID to reaches
-    # reaches_gdf["reach_id"] = reaches_gdf.reach_id.astype(str)
-    # reaches_gdf.set_index("reach_id", inplace=True)
+    # Join CATID to reaches
+    reaches_gdf["reach_id"] = reaches_gdf.reach_id.astype(str)
+    reaches_gdf.set_index("reach_id", inplace=True)
 
-    # df_lookup["reach_id"] = df_lookup.reach_id.astype("str")
-    # df_lookup.set_index("reach_id", inplace=True)
+    df_lookup["reach_id"] = df_lookup.reach_id.astype("str")
+    df_lookup.set_index("reach_id", inplace=True)
 
-    # gdf_catid_lines = reaches_gdf.join(df_lookup)
-    # gdf_catid_lines.reset_index(inplace=True)
-    # gdf_catid_lines.dropna(subset=["catid"], inplace=True)
+    gdf_catid_lines = reaches_gdf.join(df_lookup)
+    gdf_catid_lines.reset_index(inplace=True)
+    gdf_catid_lines.dropna(subset=["catid"], inplace=True)
 
-    # gdf_catid_lines["catid"] = gdf_catid_lines.catid.astype(str)
-    # gdf_catid_lines.set_index("catid", inplace=True)
+    gdf_catid_lines["catid"] = gdf_catid_lines.catid.astype(str)
+    gdf_catid_lines.set_index("catid", inplace=True)
 
-    # polys_gdf.set_index("CATID", inplace=True)
+    polys_gdf.set_index("CATID", inplace=True)
 
-    # # Join streamflow data to reaches
-    # reaches_gdf_data = gdf_catid_lines.join(polys_gdf, rsuffix="_r")
-    # reaches_gdf_data.drop(columns=["geometry_r"], inplace=True)
-    # # reaches_gdf_data.loc["121520"]
-    # reaches_gdf_data.to_parquet(SWORD_REACHES_DATA)
+    # Join streamflow data to reaches
+    reaches_gdf_data = gdf_catid_lines.join(polys_gdf, rsuffix="_r")
+    reaches_gdf_data.drop(columns=["geometry_r"], inplace=True)
+    # reaches_gdf_data.loc["121520"]
+    reaches_gdf_data.to_parquet(SWORD_REACHES_DATA)
 
     # Create individual popup plots and save as png for each reach
-    # create_plots()
+    create_plots()
 
     # Build the final map
     embed_plots()
